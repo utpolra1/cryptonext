@@ -1,24 +1,33 @@
 "use client";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
-import {
-  HomeIcon,
-  Wallet,
-  BarChart2,
-  DollarSign,
-  Gift,
-  PieChart,
-  Activity,
-  ChevronLeft,
-  Moon,
-  Sun,
-  LogIn,
-} from "lucide-react";
+import { useState, useEffect, useContext } from "react";
+import Link from "next/link";
+import { signOut } from "firebase/auth"; // Firebase signOut function
+import { HomeIcon, Wallet, BarChart2, DollarSign, Gift, PieChart, Activity, ChevronLeft, Moon, Sun, LogIn, User } from "lucide-react";
 import { useTheme } from "@/components/themeprovider";
+import { useAuth } from "@/context/AuthContext";
+import { auth } from "@/lib/firebase";
+
 
 const Navbar = () => {
   const pathname = usePathname(); // Get current route
   const { isDarkMode, toggleDarkMode } = useTheme();
+
+  const { user, loading, signInWithGoogle, logout } = useAuth();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  console.log(user)
+
+  useEffect(() => {
+    setIsLoggedIn(!!user); // Check if the user is logged in
+  }, [user]);
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+    } catch (err) {
+      console.error("Error signing out", err);
+    }
+  };
 
   return (
     <div className="flex bg-background">
@@ -37,15 +46,15 @@ const Navbar = () => {
           <div className="space-y-1 px-3">
             <NavItem
               icon={<HomeIcon className="h-5 w-5" />}
-              label="Home"
+              label="home"
               href="/"
               active={pathname === "/"}
             />
             <NavItem
               icon={<Wallet className="h-5 w-5" />}
-              label="Wallets"
-              href="/wallets"
-              active={pathname === "/wallets"}
+              label="Wallet"
+              href="/wallet"
+              active={pathname === "/wallet"}
             />
             <NavItem
               icon={<BarChart2 className="h-5 w-5" />}
@@ -109,16 +118,37 @@ const Navbar = () => {
             </nav>
 
             <div className="flex items-center gap-3">
-              <button className="hidden md:flex p-2 border border-gray-300 rounded-md bg-gray-200 dark:bg-gray-700">
-                Buy crypto
-              </button>
-              <button className="hidden md:flex p-2 border border-gray-300 rounded-md bg-gray-200 dark:bg-gray-700">
-                <LogIn className="mr-2 h-4 w-4" />
-                Log in
-              </button>
-              <button className="p-2 border border-gray-300 rounded-md bg-gray-200 dark:bg-gray-700">
-                Sign Up
-              </button>
+              {isLoggedIn ? (
+                <>
+                  <div className="flex items-center gap-2">
+                    <img
+                      src={user?.photoURL || "/default-avatar.png"} // Display user image or default avatar
+                      alt="User Avatar"
+                      className="h-8 w-8 rounded-full"
+                    />
+                    <button
+                      className="p-2 border border-gray-300 rounded-md bg-gray-200 dark:bg-gray-700"
+                      onClick={handleLogout}
+                    >
+                      Log out
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <Link href="/login">
+                    <button className="hidden md:flex items-center gap-2 p-2 border border-gray-300 rounded-md bg-gray-200 dark:bg-gray-700">
+                      Log in
+                    </button>
+                  </Link>
+
+                  <Link href="/signup">
+                    <button className="p-2 border border-gray-300 rounded-md bg-gray-200 dark:bg-gray-700">
+                      Sign Up
+                    </button>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </header>
@@ -140,7 +170,6 @@ function NavItem({ icon, label, href = "#", active = false, onClick }) {
     </a>
   );
 }
-
 
 function NavLink({ href, label }) {
   const pathname = usePathname();
