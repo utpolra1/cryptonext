@@ -1,4 +1,3 @@
-// components/Prices.tsx
 "use client";
 
 const prices = [
@@ -32,8 +31,11 @@ export default function Prices() {
         <h2 className="text-2xl font-bold mb-4">Market Prices</h2>
         <div className="space-y-4">
           {prices.map((coin) => (
-            <div key={coin.symbol} className="flex items-center justify-between border-b pb-4">
-              <div className="flex items-center gap-3">
+            <div
+              key={coin.symbol}
+              className="flex flex-col md:flex-row items-center justify-between border-b pb-4"
+            >
+              <div className="flex items-center gap-3 mb-4 md:mb-0">
                 <img src={coin.icon} alt={coin.name} className="w-8 h-8" />
                 <div>
                   <p className="font-semibold">{coin.name}</p>
@@ -41,7 +43,9 @@ export default function Prices() {
                 </div>
               </div>
               <div className="text-right">
-                <p className="text-lg font-semibold">${coin.price.toLocaleString()}</p>
+                <p className="text-lg font-semibold">
+                  ${coin.price.toLocaleString()}
+                </p>
                 <p
                   className={`text-sm ${
                     coin.change >= 0 ? "text-green-600" : "text-red-500"

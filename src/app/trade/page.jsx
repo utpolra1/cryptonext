@@ -1,12 +1,13 @@
-import CryptoTracker from "@/components/trade/cryptotracker"
+import CryptoTracker from "@/components/trade/cryptotracker";
 
 export default function TradePage() {
   return (
-    <div className="p-6">
+    <div className="p-4 md:p-6 bg-background min-h-screen">
       <CryptoTracker />
 
       <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-card rounded-lg p-4 border border-border">
+        {/* Place Order */}
+        <div className="bg-card rounded-lg p-4 border border-border w-full">
           <h2 className="text-lg font-semibold mb-4">Place Order</h2>
           <div className="flex gap-2 mb-4">
             <button className="flex-1 py-2 bg-primary text-primary-foreground rounded-md">Buy</button>
@@ -14,37 +15,42 @@ export default function TradePage() {
           </div>
 
           <div className="space-y-4">
+            {/* Price Input */}
             <div>
               <label className="text-sm text-muted-foreground">Price</label>
               <div className="flex mt-1">
                 <input
                   type="text"
-                  className="flex-1 p-2 bg-background border border-border rounded-l-md"
+                  className="w-full p-2 bg-background border border-border rounded-l-md"
                   placeholder="0.00"
                 />
                 <div className="p-2 bg-muted border border-l-0 border-border rounded-r-md">USDT</div>
               </div>
             </div>
 
+            {/* Amount Input */}
             <div>
               <label className="text-sm text-muted-foreground">Amount</label>
               <div className="flex mt-1">
                 <input
                   type="text"
-                  className="flex-1 p-2 bg-background border border-border rounded-l-md"
+                  className="w-full p-2 bg-background border border-border rounded-l-md"
                   placeholder="0.00"
                 />
                 <div className="p-2 bg-muted border border-l-0 border-border rounded-r-md">BTC</div>
               </div>
             </div>
 
-            <button className="w-full py-2 bg-primary text-primary-foreground rounded-md">Buy BTC</button>
+            <button className="w-full py-2 bg-primary text-primary-foreground rounded-md">
+              Buy BTC
+            </button>
           </div>
         </div>
 
-        <div className="bg-card rounded-lg p-4 border border-border">
+        {/* Recent Trades */}
+        <div className="bg-card rounded-lg p-4 border border-border w-full">
           <h2 className="text-lg font-semibold mb-4">Recent Trades</h2>
-          <div className="space-y-2">
+          <div className="space-y-2 overflow-x-auto">
             <div className="flex justify-between text-sm text-muted-foreground">
               <span>Price</span>
               <span>Amount</span>
@@ -64,6 +70,5 @@ export default function TradePage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
-

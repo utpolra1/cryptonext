@@ -41,7 +41,6 @@ export default function CryptoTracker() {
 
       // Generate data for the past 100 periods (15-minute candles)
       for (let i = 0; i < 100; i++) {
-        // Create more realistic price movements
         const volatility = Math.random() * 200 + 50 // Random volatility between 50-250
         const direction = Math.random() > 0.5 ? 1 : -1 // Random direction
         const change = direction * volatility * (Math.random() * 0.8 + 0.2) // Random change with direction
@@ -63,7 +62,6 @@ export default function CryptoTracker() {
           volume: Math.random() * 100 + 10, // Random volume
         })
 
-        // Set the next base price to this candle's close price
         basePrice = close
       }
 
@@ -94,7 +92,6 @@ export default function CryptoTracker() {
       setCandleData(initialCandles)
 
       const interval = setInterval(() => {
-        // Update price with random change
         setCryptoData((prev) => {
           const randomChange = (Math.random() * 100 - 50) * 2
           const newPrice = prev.price + randomChange
@@ -109,7 +106,6 @@ export default function CryptoTracker() {
           }
         })
 
-        // Update candle data
         setCandleData((prev) => {
           if (!prev || prev.length === 0) return generateInitialCandleData()
 
@@ -118,7 +114,6 @@ export default function CryptoTracker() {
           const newPrice = cryptoData.price + (Math.random() * 100 - 50) * 2
 
           if (isNewCandle) {
-            // Create a new candle
             const newCandle = {
               time: Math.floor(Date.now() / 1000),
               open: lastCandle.close,
@@ -129,7 +124,6 @@ export default function CryptoTracker() {
             }
             return [...prev, newCandle].slice(-100) // Keep last 100 candles
           } else {
-            // Update the last candle
             const updatedCandle = {
               ...lastCandle,
               high: Math.max(lastCandle.high, newPrice),
@@ -153,15 +147,15 @@ export default function CryptoTracker() {
 
   return (
     <div className="flex flex-col">
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
-        <div className="flex items-center gap-2 mb-2 md:mb-0">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
+        <div className="flex items-center gap-2 mb-2 sm:mb-0">
           <div className="bg-orange-500 rounded-full w-8 h-8 flex items-center justify-center">
             <span className="font-bold text-sm">₿</span>
           </div>
           <h2 className="text-xl font-bold">{cryptoData.symbol}</h2>
         </div>
 
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap gap-4 sm:flex-row">
           <div className="flex flex-col">
             <span className="text-gray-400 text-sm">Last Price</span>
             <div className="flex items-center">
@@ -194,7 +188,7 @@ export default function CryptoTracker() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="lg:col-span-3 bg-card rounded-lg overflow-hidden border border-border">
           <div className="flex justify-end p-2 border-b border-border">
             <div className="flex gap-2">
@@ -221,11 +215,7 @@ export default function CryptoTracker() {
 
           {chartType === "candlestick" && (
             <div className="p-0">
-              <CandlestickChart
-                key={`candlestick-${chartKey}`}
-                candleData={candleData}
-                onError={() => handleChartError("candlestick")}
-              />
+              <CandlestickChart key={`candlestick-${chartKey}`} candleData={candleData} onError={() => handleChartError("candlestick")} />
             </div>
           )}
 
@@ -249,4 +239,3 @@ export default function CryptoTracker() {
     </div>
   )
 }
-
